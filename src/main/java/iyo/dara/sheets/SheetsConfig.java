@@ -18,7 +18,7 @@ public class SheetsConfig {
     private static final String SHEETS_SERVICE_ACCOUNT_NAME = "Sarcophagus-sheets";
 
     @Bean
-    public Sheets SheetsService() throws Exception {
+    public Sheets sheets() throws Exception {
         InputStream credentialsStream = getClass().getResourceAsStream(PATH_GOOGLE_CREDENTIALS);
 
         var credentials = ServiceAccountCredentials.fromStream(credentialsStream)
