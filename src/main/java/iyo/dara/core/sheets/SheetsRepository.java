@@ -3,6 +3,7 @@ package iyo.dara.core.sheets;
 import com.google.api.services.sheets.v4.Sheets;
 import com.google.api.services.sheets.v4.model.BatchUpdateValuesRequest;
 import com.google.api.services.sheets.v4.model.ValueRange;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -13,7 +14,9 @@ import java.util.List;
 @Repository
 public class SheetsRepository {
     private final Sheets sheets;
-    private static final String SPREADSHEET_ID = "1JaFM8-uaWkURPYirs5Vj_x2PblK9npKjVanEEztOgKw";
+
+    @Value("${spreadsheet.id}")
+    private String SPREADSHEET_ID;
 
     public SheetsRepository(Sheets sheets) {
         this.sheets = sheets;
