@@ -6,7 +6,7 @@ import iyo.dara.core.domain.DatedAccountable;
 import java.time.LocalDate;
 
 public record Menza(
-        Store store,
+        String store,
         double cost,
         LocalDate date,
         AccountType account

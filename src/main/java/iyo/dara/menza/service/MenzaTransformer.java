@@ -14,13 +14,14 @@ public class MenzaTransformer implements SheetsTransformer<Menza> {
     @Override
     public Menza fromSheet(List<Object> row) {
         return new Menza(
-                parseStore(ParsingUtils.getString(row, 0)),
+                ParsingUtils.getString(row, 0),
                 ParsingUtils.parseCost(ParsingUtils.getString(row, 1)),
                 ParsingUtils.parseDate(ParsingUtils.getString(row, 2)),
                 AccountType.valueOf(ParsingUtils.getString(row, 3))
         );
     }
 
+    /*
     private Store parseStore(String value) {
         if (value == null || value.isBlank()) return null;
         String normalized = value.toUpperCase().replaceAll("[^A-Z]", "_");
@@ -30,4 +31,5 @@ public class MenzaTransformer implements SheetsTransformer<Menza> {
             return null;
         }
     }
+     */
 }

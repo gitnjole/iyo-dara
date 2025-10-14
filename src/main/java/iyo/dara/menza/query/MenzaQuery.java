@@ -15,7 +15,7 @@ public record MenzaQuery(
         String range,
         Optional<LocalDate> startDate,
         Optional<LocalDate> endDate,
-        Optional<Store> store,
+        Optional<String> store,
         Optional<AccountType> account
 ) {
     public static MenzaQuery from(ServerRequest request) {
@@ -26,7 +26,7 @@ public record MenzaQuery(
                 range,
                 QueryParser.parseDate(request, "startDate"),
                 QueryParser.parseDate(request, "endDate"),
-                QueryParser.parseEnum(request, "store", Store.class),
+                QueryParser.parseString(request, "store"),
                 QueryParser.parseEnum(request, "account", AccountType.class)
         );
     }
@@ -39,6 +39,6 @@ public record MenzaQuery(
     }
 
     private boolean matchesStore(Menza m) {
-        return store.map(c -> m.store().equals(c)).orElse(true);
+        return store.map(c -> m.store().equalsIgnoreCase(c)).orElse(true);
     }
 }

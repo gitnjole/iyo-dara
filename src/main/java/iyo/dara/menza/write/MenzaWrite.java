@@ -13,7 +13,7 @@ public record MenzaWrite(List<MenzaDto> menzas) {
     ) {
         public static MenzaDto from(Menza m) {
             return new MenzaDto(
-                    m.store().displayName(),
+                    m.store(),
                     m.cost(),
                     m.date().toString(),
                     m.account().name()
