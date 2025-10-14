@@ -15,7 +15,18 @@ public class ParsingUtils {
 
     public static double parseCost(String raw) {
         if (raw == null || raw.isBlank()) return 0.0;
-        String cleaned = raw.replaceAll("[^0-9,.-]", "").replace(",", ".");
+
+        String cleaned = raw.replaceAll("[^0-9,.-]", "");
+
+        if (cleaned.matches(".*\\.[0-9]{3,}.*") && cleaned.contains(",")) {
+            cleaned = cleaned.replace(".", "").replace(",", ".");
+        } else if (cleaned.chars().filter(ch -> ch == ',').count() == 1
+                && cleaned.indexOf(',') > cleaned.length() - 3) {
+            cleaned = cleaned.replace(",", ".");
+        } else {
+            cleaned = cleaned.replace(",", "");
+        }
+
         try {
             return Double.parseDouble(cleaned);
         } catch (NumberFormatException e) {
