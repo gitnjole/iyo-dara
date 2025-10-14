@@ -13,7 +13,7 @@ import java.time.LocalDate;
 import java.util.Optional;
 
 public record TransactionQuery(
-        String source,
+        String range,
         Optional<LocalDate> startDate,
         Optional<LocalDate> endDate,
         Optional<Category> category,

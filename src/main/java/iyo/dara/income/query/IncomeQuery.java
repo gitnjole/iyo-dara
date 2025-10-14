@@ -12,7 +12,7 @@ import java.time.LocalDate;
 import java.util.Optional;
 
 public record IncomeQuery (
-    String source,
+    String range,
     Optional<LocalDate> startDate,
     Optional<LocalDate> endDate,
     Optional<Source> incomeSource,
