@@ -35,6 +35,6 @@ public class TransactionService {
     }
 
     public Flux<Transaction> query(TransactionQuery query) {
-        return query.applyFilters(stream(query.source()));
+        return query.applyFilters(stream(query.range()));
     }
 }

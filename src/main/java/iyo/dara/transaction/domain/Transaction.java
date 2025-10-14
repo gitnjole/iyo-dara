@@ -11,12 +11,12 @@ public record Transaction(
         Subcategory subcategory,
         double cost,
         LocalDate date,
-        AccountType paymentSource,
+        AccountType account,
         boolean impulse
 ) implements DatedAccountable {
     @Override
     public LocalDate date() { return date; }
 
     @Override
-    public AccountType account() { return paymentSource; }
+    public AccountType account() { return account; }
 }
