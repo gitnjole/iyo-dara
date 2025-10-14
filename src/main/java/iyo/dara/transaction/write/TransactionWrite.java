@@ -22,7 +22,7 @@ public record TransactionWrite(List<TransactionDto> transactions) {
                     t.subcategory().name(),
                     t.cost(),
                     t.date().toString(),
-                    t.paymentSource().name(),
+                    t.account().name(),
                     t.impulse()
             );
         }

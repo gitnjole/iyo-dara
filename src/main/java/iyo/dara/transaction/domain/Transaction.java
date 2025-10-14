@@ -18,5 +18,5 @@ public record Transaction(
     public LocalDate date() { return date; }
 
     @Override
-    public AccountType paymentSource() { return paymentSource; }
+    public AccountType account() { return paymentSource; }
 }

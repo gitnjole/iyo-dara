@@ -7,14 +7,14 @@ import java.util.List;
 public record IncomeWrite (List<IncomeDto> incomes) {
     public record IncomeDto(
             String source,
-            String paymentSource,
+            String account,
             double amount,
             String date
     ) {
         public static IncomeDto from(Income i) {
             return new IncomeDto(
                     i.source().name(),
-                    i.paymentSource().name(),
+                    i.account().name(),
                     i.amount(),
                     i.date().toString()
             );
