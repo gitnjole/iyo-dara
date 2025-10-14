@@ -19,11 +19,11 @@ public record IncomeQuery (
     Optional<AccountType> account
 ) {
     public static IncomeQuery from(ServerRequest request) {
-        String source = QueryParser.parseString(request, "source")
-                .orElseThrow(() -> new IllegalArgumentException("Missing param 'source'"));
+        String range = QueryParser.parseString(request, "range")
+                .orElseThrow(() -> new IllegalArgumentException("Missing param 'range'"));
 
         return new IncomeQuery(
-                source,
+                range,
                 QueryParser.parseDate(request, "startDate"),
                 QueryParser.parseDate(request, "endDate"),
                 QueryParser.parseEnum(request, "incomeSource", Source.class),

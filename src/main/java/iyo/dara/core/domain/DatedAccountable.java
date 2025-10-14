@@ -6,5 +6,5 @@ import java.time.LocalDate;
 
 public interface DatedAccountable {
     LocalDate date();
-    AccountType paymentSource();
+    AccountType account();
 }

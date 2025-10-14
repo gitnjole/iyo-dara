@@ -24,6 +24,6 @@ public class ReactiveFilters {
             Flux<T> flux, Optional<AccountType> account) {
 
         return flux.filter(item ->
-                account.map(a -> item.paymentSource().equals(a)).orElse(true));
+                account.map(a -> item.account().equals(a)).orElse(true));
     }
 }

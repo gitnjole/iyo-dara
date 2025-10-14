@@ -21,11 +21,11 @@ public record TransactionQuery(
         Optional<AccountType> account
 ) {
     public static TransactionQuery from(ServerRequest request) {
-        String source = QueryParser.parseString(request, "source")
-                .orElseThrow(() -> new IllegalArgumentException("Missing param 'source'"));
+        String range = QueryParser.parseString(request, "range")
+                .orElseThrow(() -> new IllegalArgumentException("Missing param 'range'"));
 
         return new TransactionQuery(
-                source,
+                range,
                 QueryParser.parseDate(request, "startDate"),
                 QueryParser.parseDate(request, "endDate"),
                 QueryParser.parseEnum(request, "category", Category.class),
