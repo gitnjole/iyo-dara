@@ -3,6 +3,7 @@ package iyo.dara.menza.service;
 import iyo.dara.core.sheets.SheetsRepository;
 import iyo.dara.core.sheets.SheetsTransformer;
 import iyo.dara.menza.domain.Menza;
+import iyo.dara.menza.query.MenzaQuery;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 
@@ -25,4 +26,6 @@ public class MenzaService {
         return readSheet(range)
                 .map(transformer::fromSheet);
     }
+
+    public Flux<Menza> query(MenzaQuery query) { return query.applyFilters(stream(query.range())); }
 }
