@@ -38,7 +38,12 @@ public record TransactionQuery(
         return ReactiveFilters
                 .byDateRange(flux, startDate, endDate)
                 .transform(f -> ReactiveFilters.byAccount(f, account))
+                .filter(this::matchesCategory)
                 .filter(this::matchesSubCategory);
+    }
+
+    private boolean matchesCategory(Transaction t) {
+        return category.map(c -> t.category().equals(c)).orElse(true);
     }
 
     private boolean matchesSubCategory(Transaction t) {
