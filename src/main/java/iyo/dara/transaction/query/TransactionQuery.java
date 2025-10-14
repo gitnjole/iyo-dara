@@ -2,6 +2,7 @@ package iyo.dara.transaction.query;
 
 import iyo.dara.account.domain.AccountType;
 import iyo.dara.core.query.QueryParser;
+import iyo.dara.core.query.ReactiveFilters;
 import iyo.dara.transaction.domain.Category;
 import iyo.dara.transaction.domain.Subcategory;
 import iyo.dara.transaction.domain.Transaction;
@@ -34,21 +35,10 @@ public record TransactionQuery(
     }
 
     public Flux<Transaction> applyFilters(Flux<Transaction> flux) {
-        return flux
-                .filter(this::matchesDateRange)
-                .filter(this::matchesCategory)
-                .filter(this::matchesSubCategory)
-                .filter(this::matchesAccount);
-    }
-
-    private boolean matchesDateRange(Transaction t) {
-        boolean afterStart = startDate.map(start -> !t.date().isBefore(start)).orElse(true);
-        boolean beforeEnd = endDate.map(end -> !t.date().isAfter(end)).orElse(true);
-        return afterStart && beforeEnd;
-    }
-
-    private boolean matchesCategory(Transaction t) {
-        return category.map(c -> t.category().equals(c)).orElse(true);
+        return ReactiveFilters
+                .byDateRange(flux, startDate, endDate)
+                .transform(f -> ReactiveFilters.byAccount(f, account))
+                .filter(this::matchesSubCategory);
     }
 
     private boolean matchesSubCategory(Transaction t) {
@@ -58,9 +48,5 @@ public record TransactionQuery(
         return subcategory
                 .map(sc -> t.subcategory().name().equalsIgnoreCase(sc.name()))
                 .orElse(true);
-    }
-
-    private boolean matchesAccount(Transaction t) {
-        return account.map(a -> t.paymentSource().equals(a)).orElse(true);
     }
 }
