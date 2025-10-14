@@ -15,7 +15,7 @@ public class IncomeHandler {
 
     public IncomeHandler(IncomeService service) { this.service = service;  }
 
-    public Mono<ServerResponse> getIncome(ServerRequest request) {
+    public Mono<ServerResponse> getIncomes(ServerRequest request) {
         IncomeQuery query = IncomeQuery.from(request);
 
         return ServerResponse.ok()

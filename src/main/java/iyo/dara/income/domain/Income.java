@@ -7,7 +7,7 @@ import java.time.LocalDate;
 
 public record Income(
         Source source,
-        AccountType paymentSource,
+        AccountType account,
         double amount,
         LocalDate date
 
@@ -16,5 +16,5 @@ public record Income(
     public LocalDate date() { return date; }
 
     @Override
-    public AccountType account() { return paymentSource; }
+    public AccountType account() { return account; }
 }

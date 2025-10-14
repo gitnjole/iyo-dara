@@ -33,5 +33,5 @@ public class IncomeService {
 
     }
 
-    public Flux<Income> query(IncomeQuery query) { return query.applyFilters(stream(query.source())); }
+    public Flux<Income> query(IncomeQuery query) { return query.applyFilters(stream(query.range())); }
 }
