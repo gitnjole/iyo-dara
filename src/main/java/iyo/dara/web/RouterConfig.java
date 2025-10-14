@@ -1,6 +1,7 @@
 package iyo.dara.web;
 
 import iyo.dara.income.handler.IncomeHandler;
+import iyo.dara.menza.handler.MenzaHandler;
 import iyo.dara.transaction.handler.TransactionHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,7 +14,8 @@ import static org.springframework.web.reactive.function.server.RouterFunctions.r
 public class RouterConfig {
 
     private static final String PATH_NAME_GET_TRANSACTIONS = "/api/transactions";
-    private static final String PATH_NAME_GET_INCOME = "/api/incomes";
+    private static final String PATH_NAME_GET_INCOMES = "/api/incomes";
+    private static final String PATH_NAME_GET_MENZAS = "api/menzas";
 
     @Bean
     public RouterFunction<ServerResponse> transactionRoutes(TransactionHandler handler) {
@@ -25,7 +27,14 @@ public class RouterConfig {
     @Bean
     public RouterFunction<ServerResponse> incomeRoutes(IncomeHandler handler) {
         return route()
-                .GET(PATH_NAME_GET_INCOME, handler::getIncome)
+                .GET(PATH_NAME_GET_INCOMES, handler::getIncomes)
+                .build();
+    }
+
+    @Bean
+    public RouterFunction<ServerResponse> menzaRoutes(MenzaHandler handler) {
+        return route()
+                .GET(PATH_NAME_GET_MENZAS, handler::getMenzas)
                 .build();
     }
 }
