@@ -36,4 +36,20 @@ public class ParsingUtils {
             return LocalDate.now();
         }
     }
+
+    public static String formatDate(LocalDate date) {
+        return date.format(DateTimeFormatter.ofPattern("d.M.yyyy."));
+    }
+
+    public static String formatCost(double cost) {
+        return String.valueOf(cost);
+    }
+
+    public static String formatCostForSheets(double cost) {
+        return String.format(Locale.GERMANY, "%.2f", cost);
+    }
+
+    public static <E extends Enum<E>> E parseEnum(String value, Class<E> enumType) {
+        return Enum.valueOf(enumType, value);
+    }
 }
