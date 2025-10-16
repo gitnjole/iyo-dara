@@ -21,6 +21,7 @@ public class RouterConfig {
     public RouterFunction<ServerResponse> transactionRoutes(TransactionHandler handler) {
         return route()
                 .GET(PATH_NAME_GET_TRANSACTIONS, handler::getTransactions)
+                .POST(PATH_NAME_GET_TRANSACTIONS, handler::write)
                 .build();
     }
 
@@ -28,6 +29,7 @@ public class RouterConfig {
     public RouterFunction<ServerResponse> incomeRoutes(IncomeHandler handler) {
         return route()
                 .GET(PATH_NAME_GET_INCOMES, handler::getIncomes)
+                .POST(PATH_NAME_GET_INCOMES, handler::write)
                 .build();
     }
 
