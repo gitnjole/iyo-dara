@@ -1,6 +1,6 @@
 package iyo.dara.core.domain;
 
-import iyo.dara.account.domain.AccountType;
+import iyo.dara.domain.account.AccountType;
 
 import java.time.LocalDate;
 

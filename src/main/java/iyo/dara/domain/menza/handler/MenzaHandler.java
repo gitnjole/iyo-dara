@@ -1,0 +1,35 @@
+package iyo.dara.domain.menza.handler;
+
+import iyo.dara.domain.menza.query.MenzaQuery;
+import iyo.dara.domain.menza.service.MenzaService;
+import iyo.dara.domain.menza.write.MenzaWrite;
+import org.springframework.http.MediaType;
+import org.springframework.stereotype.Component;
+import org.springframework.web.reactive.function.server.ServerRequest;
+import org.springframework.web.reactive.function.server.ServerResponse;
+import reactor.core.publisher.Mono;
+
+@Component
+public class MenzaHandler {
+    private final MenzaService service;
+
+    public MenzaHandler(MenzaService service) { this.service = service; }
+
+    public Mono<ServerResponse> getMenzas(ServerRequest request) {
+        MenzaQuery query = MenzaQuery.from(request);
+
+        return ServerResponse.ok()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(service.query(query)
+                        .map(MenzaWrite.MenzaDto::from),
+                        MenzaWrite.MenzaDto.class)
+                .onErrorResume(this::handleError);
+    }
+
+    private Mono<ServerResponse> handleError(Throwable e) {
+        return ServerResponse.badRequest()
+                .bodyValue(new MenzaHandler.ErrorResponse(e.getMessage()));
+    }
+
+    private record ErrorResponse(String error) {}
+}

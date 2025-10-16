@@ -1,6 +1,6 @@
 package iyo.dara.core.query;
 
-import iyo.dara.account.domain.AccountType;
+import iyo.dara.domain.account.AccountType;
 import iyo.dara.core.domain.DatedAccountable;
 import reactor.core.publisher.Flux;
 

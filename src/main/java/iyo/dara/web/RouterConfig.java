@@ -1,8 +1,8 @@
 package iyo.dara.web;
 
-import iyo.dara.income.handler.IncomeHandler;
-import iyo.dara.menza.handler.MenzaHandler;
-import iyo.dara.transaction.handler.TransactionHandler;
+import iyo.dara.domain.income.handler.IncomeHandler;
+import iyo.dara.domain.menza.handler.MenzaHandler;
+import iyo.dara.domain.transaction.handler.TransactionHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.reactive.function.server.RouterFunction;
