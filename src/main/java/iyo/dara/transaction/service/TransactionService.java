@@ -1,37 +1,39 @@
 package iyo.dara.transaction.service;
 
+import iyo.dara.core.sheets.IOSheetsTransformer;
+import iyo.dara.core.sheets.SheetEntityService;
 import iyo.dara.transaction.domain.Transaction;
 import iyo.dara.transaction.query.TransactionQuery;
 import iyo.dara.core.sheets.SheetsRepository;
-import iyo.dara.core.sheets.SheetsTransformer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import iyo.dara.transaction.write.TransactionWrite;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.util.List;
 
 @Service
-public class TransactionService {
-    private static final Logger log =  LoggerFactory.getLogger(TransactionService.class);
-
-    private final SheetsRepository repository;
-    private final SheetsTransformer<Transaction> transformer;
+public class TransactionService extends SheetEntityService<Transaction, TransactionWrite.TransactionDto> {
+    @Value("${write.range.transactions}")
+    private String WRITE_RANGE;
 
     public TransactionService(SheetsRepository repository,
-                              SheetsTransformer<Transaction> transformer) {
-        this.repository = repository;
-        this.transformer = transformer;
+                              @Qualifier("transactionTransformer") IOSheetsTransformer<Transaction, TransactionWrite.TransactionDto> transformer) {
+        super(repository, transformer);
     }
 
-    protected Flux<List<Object>> readSheet(String range) {
-        return repository.fetchRange(range);
+    public Flux<Transaction> queryAndWrite(TransactionQuery query) {
+        return query(query)
+                .collectList()
+                .flatMap(transactions ->
+                        saveAll(transactions).thenReturn(transactions))
+                .flatMapMany(Flux::fromIterable);
     }
 
-    public Flux<Transaction> stream(String range) {
-        return readSheet(range)
-                .map(transformer::fromSheet)
-                .doOnError(e -> log.error("Transaction stream error", e));
+    public Mono<Void> saveAll(List<Transaction> transactions) {
+        return saveAll(transactions, WRITE_RANGE);
     }
 
     public Flux<Transaction> query(TransactionQuery query) {

@@ -29,6 +29,17 @@ public class TransactionHandler {
                 .onErrorResume(this::handleError);
     }
 
+    public Mono<ServerResponse> write(ServerRequest request) {
+        TransactionQuery query = TransactionQuery.from(request);
+
+        return ServerResponse.ok()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(service.queryAndWrite(query)
+                                .map(TransactionWrite.TransactionDto::from),
+                        TransactionWrite.TransactionDto.class)
+                .onErrorResume(this::handleError);
+    }
+
     private Mono<ServerResponse> handleError(Throwable e) {
         return ServerResponse.badRequest()
                 .bodyValue(new ErrorResponse(e.getMessage()));
