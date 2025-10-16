@@ -1,5 +1,7 @@
 package iyo.dara.income.handler;
 
+import iyo.dara.core.sheets.SheetEntityService;
+import iyo.dara.income.domain.Income;
 import iyo.dara.income.query.IncomeQuery;
 import iyo.dara.income.service.IncomeService;
 import iyo.dara.income.write.IncomeWrite;
@@ -13,7 +15,8 @@ import reactor.core.publisher.Mono;
 public class IncomeHandler {
     private final IncomeService service;
 
-    public IncomeHandler(IncomeService service) { this.service = service;  }
+    public IncomeHandler(IncomeService service) {
+        this.service = service;  }
 
     public Mono<ServerResponse> getIncomes(ServerRequest request) {
         IncomeQuery query = IncomeQuery.from(request);
@@ -23,6 +26,17 @@ public class IncomeHandler {
                 .body(service.query(query)
                         .map(IncomeWrite.IncomeDto::from),
                         IncomeWrite.IncomeDto.class)
+                .onErrorResume(this::handleError);
+    }
+
+    public Mono<ServerResponse> write(ServerRequest request) {
+        IncomeQuery query = IncomeQuery.from(request);
+
+        return ServerResponse.ok()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(service.queryAndWrite(query)
+                        .map(IncomeWrite.IncomeDto::from),
+                    IncomeWrite.IncomeDto.class)
                 .onErrorResume(this::handleError);
     }
 

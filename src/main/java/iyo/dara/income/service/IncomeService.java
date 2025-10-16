@@ -1,36 +1,39 @@
 package iyo.dara.income.service;
 
+import iyo.dara.core.sheets.IOSheetsTransformer;
+import iyo.dara.core.sheets.SheetEntityService;
 import iyo.dara.core.sheets.SheetsRepository;
-import iyo.dara.core.sheets.SheetsTransformer;
 import iyo.dara.income.domain.Income;
 import iyo.dara.income.query.IncomeQuery;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import iyo.dara.income.write.IncomeWrite;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.util.List;
 
 @Service
-public class IncomeService {
-    private static final Logger log =  LoggerFactory.getLogger(IncomeService.class);
-
-    private final SheetsRepository repository;
-    private final SheetsTransformer<Income> transformer;
+public class IncomeService extends SheetEntityService<Income, IncomeWrite.IncomeDto> {
+    @Value("${write.range.income}")
+    private String WRITE_RANGE;
 
     public IncomeService(SheetsRepository repository,
-                         SheetsTransformer<Income> transformer) {
-        this.repository = repository;
-        this.transformer = transformer;
+                         @Qualifier("incomeTransformer")IOSheetsTransformer<Income, IncomeWrite.IncomeDto> transformer) {
+        super(repository, transformer);
     }
 
-    protected Flux<List<Object>> readSheet(String range) { return repository.fetchRange(range); }
+    public Flux<Income> queryAndWrite(IncomeQuery query) {
+        return query(query)
+                .collectList()
+                .flatMap(incomes ->
+                        saveAll(incomes).thenReturn(incomes))
+                .flatMapMany(Flux::fromIterable);
+    }
 
-    public Flux<Income> stream(String range) {
-        return readSheet(range)
-                .map(transformer::fromSheet)
-                .doOnError(e -> log.error("Income stream error", e));
-
+    public Mono<Void> saveAll(List<Income> incomes) {
+        return saveAll(incomes, WRITE_RANGE);
     }
 
     public Flux<Income> query(IncomeQuery query) { return query.applyFilters(stream(query.range())); }

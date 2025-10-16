@@ -15,7 +15,7 @@ public record IncomeQuery (
     String range,
     Optional<LocalDate> startDate,
     Optional<LocalDate> endDate,
-    Optional<Source> incomeSource,
+    Optional<Source> source,
     Optional<AccountType> account
 ) {
     public static IncomeQuery from(ServerRequest request) {
@@ -26,7 +26,7 @@ public record IncomeQuery (
                 range,
                 QueryParser.parseDate(request, "startDate"),
                 QueryParser.parseDate(request, "endDate"),
-                QueryParser.parseEnum(request, "incomeSource", Source.class),
+                QueryParser.parseEnum(request, "source", Source.class),
                 QueryParser.parseEnum(request, "account", AccountType.class)
         );
     }
@@ -39,6 +39,6 @@ public record IncomeQuery (
     }
 
     private boolean matchesIncomeSource(Income i) {
-        return incomeSource.map(c -> i.source().equals(c)).orElse(true);
+        return source.map(c -> i.source().equals(c)).orElse(true);
     }
 }
