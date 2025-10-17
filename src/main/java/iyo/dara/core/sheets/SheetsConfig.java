@@ -6,6 +6,7 @@ import com.google.api.services.sheets.v4.Sheets;
 import com.google.api.services.sheets.v4.SheetsScopes;
 import com.google.auth.http.HttpCredentialsAdapter;
 import com.google.auth.oauth2.ServiceAccountCredentials;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -14,8 +15,11 @@ import java.util.List;
 
 @Configuration
 public class SheetsConfig {
-    private static final String PATH_GOOGLE_CREDENTIALS = "/credentials/google-credentials.json";
-    private static final String SHEETS_SERVICE_ACCOUNT_NAME = "Sarcophagus-sheets";
+    @Value("${path.google.credentials}")
+    private String PATH_GOOGLE_CREDENTIALS;
+
+    @Value("${sheets.service.account.name}")
+    private String SHEETS_SERVICE_ACCOUNT_NAME;
 
     @Bean
     public Sheets sheets() throws Exception {
